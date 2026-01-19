@@ -34,14 +34,15 @@ function App() {
         throw new Error(`Request failed with status ${response.status}`)
       }
       const data = (await response.json()) as { message?: string }
-      if (!data.message) {
+      if (typeof data.message !== 'string' || !data.message) {
         throw new Error('Empty response from server')
       }
+      const responseText = data.message
       setMessages((prev) => [
         ...prev,
         {
           id: Date.now() + 1,
-          text: data.message,
+          text: responseText,
           me: false,
         },
       ])
