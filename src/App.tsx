@@ -78,12 +78,25 @@ function App() {
       const loaded: ChatMessage[] = []
       for (const m of data.messages || []) {
         const type = m.type || 'unknown'
-        const content =
-          m.data && m.data.content !== undefined
-            ? String(m.data.content)
-            : JSON.stringify(m)
-
+        
         if (type === 'system') continue
+        
+        let content = ''
+        if (m.data && m.data.content !== undefined) {
+          // Handle arrays of content (AI messages with tool calls)
+          if (Array.isArray(m.data.content)) {
+            // Extract only text messages, skip tool_use
+            const textParts = m.data.content
+              .filter((item: any) => item.type === 'text')
+              .map((item: any) => item.text)
+            content = textParts.join('\n')
+          } else if (typeof m.data.content === 'string') {
+            content = m.data.content
+          } else {
+            content = String(m.data.content)
+          }
+        }
+        
         if (type === 'human') {
           loaded.push({ id: loaded.length, role: 'user', text: content })
         } else if (type === 'ai') {
