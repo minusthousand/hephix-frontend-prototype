@@ -1,78 +1,77 @@
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Space+Grotesk:wght@400;500;600;700&display=swap');
-
 :root {
-  font-family: 'Space Grotesk', 'Helvetica Neue', Arial, sans-serif;
+  --ink: #0c1222;
+  --ink-soft: #2c3350;
+  --primary: #003bff;
+  --primary-dark: #0022a6;
+  --accent: #0ef1c6;
+  --paper: #f5f7ff;
+  --surface: #ffffff;
+  --border: rgba(12, 18, 34, 0.12);
+  --shadow: 0 28px 60px rgba(0, 15, 80, 0.12);
+  --shadow-soft: 0 14px 30px rgba(0, 15, 80, 0.12);
+  font-family: "Space Grotesk", system-ui, sans-serif;
   line-height: 1.5;
   font-weight: 400;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: #17223b;
-  background-color: #f7f4ef;
-  --ink: #17223b;
-  --muted: #54607a;
-  --panel: #fefcf9;
-  --panel-alt: #f4f6fb;
-  --accent: #ffffff;
-  --accent-ink: #111822;
-  --shadow-strong: 0 20px 60px rgba(27, 37, 63, 0.08);
-  --shadow-soft: 0 12px 30px rgba(27, 37, 63, 0.08);
-  --font-display: 'Fraunces', 'Times New Roman', serif;
+  color: var(--ink);
+  background-color: var(--paper);
+}
+
+:root[data-theme='dark'] {
+  --ink: #f2f5ff;
+  --ink-soft: #b6c1e0;
+  --primary: #5b7bff;
+  --primary-dark: #b7c7ff;
+  --accent: #22f1c4;
+  --paper: #0b1222;
+  --surface: #0f182c;
+  --border: rgba(164, 183, 255, 0.18);
+  --shadow: 0 28px 60px rgba(0, 10, 30, 0.55);
+  --shadow-soft: 0 14px 30px rgba(0, 10, 30, 0.4);
+  color: var(--ink);
+  background-color: var(--paper);
 }
 
 * {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-  margin: 0;
-  min-width: 320px;
   min-height: 100vh;
-  background: radial-gradient(
-      circle at top left,
-      rgba(255, 170, 141, 0.4),
-      transparent 55%
-    ),
-    radial-gradient(
-      circle at 20% 60%,
-      rgba(104, 178, 255, 0.25),
-      transparent 45%
-    ),
-    #f7f4ef;
+  background: radial-gradient(circle at top left, #eef2ff 0%, #fefcff 40%, #ffffff 100%);
+  transition: background 0.4s ease, color 0.4s ease;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    color: #e7ecf8;
-    background-color: #0d111b;
-    --ink: #e7ecf8;
-    --muted: #97a6c3;
-    --panel: #121827;
-    --panel-alt: #1a2236;
-    --accent: #ffffff;
-    --accent-ink: #0b1020;
-    --shadow-strong: 0 20px 60px rgba(4, 7, 16, 0.65);
-    --shadow-soft: 0 12px 30px rgba(4, 7, 16, 0.55);
-  }
-
-  body {
-    background: radial-gradient(
-        circle at top left,
-        rgba(255, 122, 91, 0.15),
-        transparent 55%
-      ),
-      radial-gradient(
-        circle at 20% 60%,
-        rgba(100, 160, 255, 0.12),
-        transparent 45%
-      ),
-      #0d111b;
-  }
+:root[data-theme='dark'] body {
+  background:
+    radial-gradient(circle at top left, rgba(91, 123, 255, 0.2), transparent 40%),
+    radial-gradient(circle at 80% 10%, rgba(34, 241, 196, 0.18), transparent 45%),
+    #0b1222;
 }
 
-#root {
-  min-height: 100vh;
+img {
+  max-width: 100%;
+  display: block;
+}
+
+*,
+*::before,
+*::after {
+  transition: background-color 0.4s ease, border-color 0.4s ease, color 0.4s ease,
+    box-shadow 0.4s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+  }
 }
 
 a {
@@ -80,13 +79,29 @@ a {
   text-decoration: none;
 }
 
-button {
+button,
+input {
   font-family: inherit;
-  cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-button:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 8px 18px rgba(23, 34, 59, 0.12);
+#root {
+  min-height: 100vh;
+}
+
+.container {
+  width: min(1120px, 92vw);
+  margin: 0 auto;
+}
+
+.bg-grid {
+  position: fixed;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(0, 59, 255, 0.12), transparent 40%),
+    radial-gradient(circle at 80% 10%, rgba(14, 241, 198, 0.12), transparent 42%),
+    linear-gradient(rgba(12, 18, 34, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(12, 18, 34, 0.03) 1px, transparent 1px);
+  background-size: auto, auto, 60px 60px, 60px 60px;
+  pointer-events: none;
+  z-index: -1;
 }
