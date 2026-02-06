@@ -31,7 +31,7 @@ function App() {
   const chatEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  const apiBaseUrl = 'http://185.243.215.95:8080'
+  const apiBaseUrl = 'https://api.hephix.eu'
 
   // Scroll to bottom on new messages
   useEffect(() => {
