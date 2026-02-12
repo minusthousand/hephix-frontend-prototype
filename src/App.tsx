@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import './App.css'
 
-type Store = 'depo' | 'darel'
+type Store = 'depo' | 'darel' | 'ebay'
+type Theme = 'light' | 'dark'
 
 type ChatMessage = {
   id: number
@@ -27,11 +28,19 @@ function App() {
   )
   const [sessions, setSessions] = useState<SessionInfo[]>([])
   const [sidebarOpen, setSidebarOpen] = useState(true)
+  const [theme, setTheme] = useState<Theme>(
+    () => (localStorage.getItem('hephix_theme') as Theme) || 'light'
+  )
 
   const chatEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  const apiBaseUrl = 'https://api.hephix.eu'
+  const apiBaseUrl = import.meta.env.VITE_CHAT_API_URL || ''
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme)
+    localStorage.setItem('hephix_theme', theme)
+  }, [theme])
 
   // Scroll to bottom on new messages
   useEffect(() => {
@@ -71,6 +80,8 @@ function App() {
       // Detect store from session id prefix
       const detectedStore = data.session_id.startsWith('darel-')
         ? 'darel'
+        : data.session_id.startsWith('ebay-')
+        ? 'ebay'
         : 'depo'
       setStore(detectedStore)
       localStorage.setItem('hephix_store', detectedStore)
@@ -112,7 +123,9 @@ function App() {
   }
 
   function getChatEndpoint() {
-    return store === 'darel' ? `${apiBaseUrl}/chat/darel` : `${apiBaseUrl}/chat`
+    if (store === 'darel') return `${apiBaseUrl}/chat/darel`
+    if (store === 'ebay') return `${apiBaseUrl}/chat/ebay`
+    return `${apiBaseUrl}/chat`
   }
 
   function handleNewChat() {
@@ -129,6 +142,10 @@ function App() {
     localStorage.setItem('hephix_store', newStore)
     // Start fresh when switching stores
     handleNewChat()
+  }
+
+  function toggleTheme() {
+    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'))
   }
 
   async function handleSend() {
@@ -194,10 +211,13 @@ function App() {
     }
   }
 
-  const storeLabel = store === 'darel' ? 'Darel.lv' : 'Depo.lv'
+  const storeLabel =
+    store === 'darel' ? 'Darel.lv' : store === 'ebay' ? 'eBay' : 'Depo.lv'
 
   return (
-    <div className="app">
+    <>
+      <div className="bg-grid" aria-hidden="true" />
+      <div className="app">
       {/* Sidebar */}
       <aside className={`sidebar ${sidebarOpen ? 'open' : 'closed'}`}>
         <div className="sidebar-header">
@@ -219,7 +239,8 @@ function App() {
         <div className="session-list">
           {sessions.map((s) => {
             const isDarel = s.session_id.startsWith('darel-')
-            const icon = isDarel ? '🔧' : '🏠'
+            const isEbay = s.session_id.startsWith('ebay-')
+            const icon = isDarel ? '🔧' : isEbay ? '🛒' : '🏠'
             const isActive = s.session_id === sessionId
             return (
               <div
@@ -250,6 +271,7 @@ function App() {
           >
             <option value="depo">🏠 Depo.lv (default)</option>
             <option value="darel">🔧 Darel.lv</option>
+            <option value="ebay">🛒 eBay</option>
           </select>
         </div>
       </aside>
@@ -268,6 +290,14 @@ function App() {
           )}
           <div className="logo">hephix</div>
           <span className={`store-badge ${store}`}>{storeLabel}</span>
+          <button
+            className="theme-toggle"
+            onClick={toggleTheme}
+            aria-label="Toggle dark theme"
+            title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+          >
+            {theme === 'dark' ? '☀︎' : '☾'}
+          </button>
         </header>
 
         <section className="chat-card">
@@ -343,7 +373,8 @@ function App() {
           </form>
         </section>
       </main>
-    </div>
+      </div>
+    </>
   )
 }
 

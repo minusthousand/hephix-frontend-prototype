@@ -45,13 +45,11 @@ body {
   min-height: 100vh;
   background: radial-gradient(circle at top left, #eef2ff 0%, #fefcff 40%, #ffffff 100%);
   transition: background 0.4s ease, color 0.4s ease;
+  overflow: hidden;
 }
 
 :root[data-theme='dark'] body {
-  background:
-    radial-gradient(circle at top left, rgba(91, 123, 255, 0.2), transparent 40%),
-    radial-gradient(circle at 80% 10%, rgba(34, 241, 196, 0.18), transparent 45%),
-    #0b1222;
+  background: #0b1222;
 }
 
 img {
@@ -86,6 +84,8 @@ input {
 
 #root {
   min-height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
 }
 
 .container {
