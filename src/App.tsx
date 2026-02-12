@@ -108,10 +108,13 @@ function App() {
           }
         }
         
+        const cleaned = content.trim()
+        if (!cleaned) continue
+
         if (type === 'human') {
-          loaded.push({ id: loaded.length, role: 'user', text: content })
+          loaded.push({ id: loaded.length, role: 'user', text: cleaned })
         } else if (type === 'ai') {
-          loaded.push({ id: loaded.length, role: 'ai', text: content })
+          loaded.push({ id: loaded.length, role: 'ai', text: cleaned })
         }
       }
       setMessages(loaded)
@@ -188,7 +191,7 @@ function App() {
         typeof data.response === 'string' ? data.response.trim() : ''
 
       if (!responseText) {
-        throw new Error('Empty response from server')
+        return
       }
 
       setMessages((prev) => [
@@ -213,6 +216,8 @@ function App() {
 
   const storeLabel =
     store === 'darel' ? 'Darel.lv' : store === 'ebay' ? 'eBay' : 'Depo.lv'
+
+  const visibleMessages = messages.filter((m) => m.text.trim().length > 0)
 
   return (
     <>
@@ -302,7 +307,7 @@ function App() {
 
         <section className="chat-card">
           <div className="chat-window">
-            {messages.length === 0 && !error && (
+            {visibleMessages.length === 0 && !error && (
               <div className="welcome">
                 <h2>Welcome to Hephix</h2>
                 <p>
@@ -314,7 +319,7 @@ function App() {
               </div>
             )}
 
-            {messages.map((message) => (
+            {visibleMessages.map((message) => (
               <div
                 key={message.id}
                 className={`message ${message.role === 'user' ? 'me' : 'them'}`}

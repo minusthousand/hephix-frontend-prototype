@@ -76,6 +76,19 @@
   align-items: center;
   justify-content: center;
   line-height: 1;
+}
+
+.btn-toggle-sidebar .icon,
+.btn-open-sidebar .icon {
+  display: inline-block;
+  line-height: 1;
+}
+
+.btn-open-sidebar .icon {
+  transform: translateY(0.5px);
+}
+
+.btn-open-sidebar {
   padding-top: 1px;
 }
 
