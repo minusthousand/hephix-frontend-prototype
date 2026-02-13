@@ -41,8 +41,15 @@
   padding: 0;
 }
 
+html,
+body,
+#root {
+  height: 100%;
+}
+
 body {
-  min-height: 100vh;
+  min-height: 100svh;
+  min-height: 100dvh;
   background: radial-gradient(circle at top left, #eef2ff 0%, #fefcff 40%, #ffffff 100%);
   transition: background 0.4s ease, color 0.4s ease;
   overflow: hidden;
@@ -83,7 +90,7 @@ input {
 }
 
 #root {
-  min-height: 100vh;
+  height: 100svh;
   height: 100dvh;
   overflow: hidden;
 }
